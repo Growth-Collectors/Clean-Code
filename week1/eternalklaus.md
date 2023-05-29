@@ -1,0 +1,18 @@
+- 나쁜 코드가 쌓일수록 생산성이 떨어진다
+  - 새로 투입된 인력은 설계 의도에 맞는 변경과 반하는 변경을 구분하지 못한다. 
+- 깨끗한 코드는 단순하고 직접적이다. 깨끗한 코드는 결코 설계자의 의도를 숨기지 않는다. 
+- 우리는 새 코드를 짜면서 끊임없이 기존 코드를 읽는다. 
+  - 코드를 읽는 시간 (10) 코드를 짜는 시간 (1) 
+- 의도가 분명하게 이름을 지어라
+  - 지뢰찾기 게임이라면 `getThem` -> `getFlaggedCells` 
+  - cell[`STATUS_VALUE`] == `FLAGGED`
+- 그릇된 정보를 피하라
+  - List자료형이 아닌데 `*List`이름을 사용하지 마라
+- noise word
+  - NameString -> Name
+  - CustomerObject -> Customer
+  - accountData -> account
+  - customerInfo -> customer
+- 한 개념에 한 단어를 사용하라
+  - 동일 코드기반에 controller, manager, driver를 섞어 쓰면 혼란스럽다
+  

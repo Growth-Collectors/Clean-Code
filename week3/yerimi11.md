@@ -102,5 +102,32 @@ public class PerDiemMealExpenses implements MealExpenses {
   }
 }
 ```
-이를 **특수 사례 패턴 SPECIALCASEPATTERN**이라 부른다.  
+이를 **특수 사례 패턴 SPECIAL CASE PATTERN**이라 부른다.  
 클래스를 만들거나 객체를 조작해 특수 사례를 처리하는 방식이다. 그러면 클래스나 객체가 예외적인 상황을 캡슐화해서 처리하므로, 클라이언트 코드가 예외적인 상황을 처리할 필요가 없어진다.  
+  
+[null을 반환하지 마라]  
+한 줄 건너 하나썩 null을 확인하는 코드
+![image](https://github.com/Growth-Collectors/Clean-Code/assets/93559998/a1d79be7-ec91-4ade-8e6a-4161c05bf037)
+null을 반환하는 코드는 일거리를 늘릴 뿐만 아니라 호출자에게 문제를 떠넘긴다. 누구 하나라도 null 확인을 빼먹는다면 애플리케이션이 통제 불능에 빠질지도 모른다.  
+위 코드에서 둘째 행에 null 확인이 빠졌다. 만약 per- sistentStore가 null이라면 실행 시 NullPointerException이 발생한다.  
+애플리케이션 저 아래서 날린 NullPointer Exception는 처리하기 어렵다.  
+  
+실상은 null 확인 이 너무 많아 문제다.  
+메서드에서 null을 반환하고 싶다면, 그대신 예외를 던지거나 특수 사례 객체를 반환한다.  
+사용하려는 외부 API가 null을 반환 한다면 감싸기 메서드를 구현해 예외를 던지거나 특수 사례 객체를 반환하는 방식을 고려한다.  
+  
+[null을 전달하지 마라]  
+정상적인 인수로 null을 기대하는 API가 아니라면 메서드로 null을 전달하는 코드는 최대한 피한다.  
+누군가 인수로 null을 전달하면 당연히 NullPointerException이 발생한다.  
+1) 이럴 때는 새로운 예외 유형을 만드는 방법이 있다.  
+![image](https://github.com/Growth-Collectors/Clean-Code/assets/93559998/c5b40490-5a64-4cdc-ade6-1bd02304a896)
+위 코드는 NullPointerException보다는 조금 낫지만, InvalidArgumentException을 잡아내는 처리기가 필요하다.  
+2) assert 문을 사용하는 방법도 있다.  
+![image](https://github.com/Growth-Collectors/Clean-Code/assets/93559998/fa8c615a-d0e2-4de0-9085-10018b4805e3)
+문서화가 잘 되어 코드 읽기는 편하지만 문제를 해결하지는 못한다. 누군가 null 을 전달하면 여전히 실행 오류가 발생한다.  
+  
+대다수 프로그래밍 언어는 호출자가 실수로 넘기는 null을 적절히 처리하는 방법이 없다. 그렇다면 애초에 null을 넘기지 못하도록 금지하는 정책이 합리적 이다.  
+즉， 인수로 null이 넘어오면 코드에 문제가 있다는 말이다. 이런 정책을 따르면 그만큼 부주의한 실수를 저지를 확률도 작아진다.  
+  
+깨끗한 코드는 읽기도 좋아야 하지만 안정성도 높아야 한다.  
+오류처리를 프로그램 논리와 분리해 독자적인 사안으로 고려하면 튼튼하고 깨끗한 코드를 작성할 수 있고, 독립적인 추론이 가능해지며, 코드 유지보수성도 크게 높아진다.  

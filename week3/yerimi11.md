@@ -107,7 +107,7 @@ public class PerDiemMealExpenses implements MealExpenses {
   
 [null을 반환하지 마라]  
 한 줄 건너 하나썩 null을 확인하는 코드
-![image](https://github.com/Growth-Collectors/Clean-Code/assets/93559998/a1d79be7-ec91-4ade-8e6a-4161c05bf037)
+![image](https://github.com/Growth-Collectors/Clean-Code/assets/93559998/a1d79be7-ec91-4ade-8e6a-4161c05bf037)  
 null을 반환하는 코드는 일거리를 늘릴 뿐만 아니라 호출자에게 문제를 떠넘긴다. 누구 하나라도 null 확인을 빼먹는다면 애플리케이션이 통제 불능에 빠질지도 모른다.  
 위 코드에서 둘째 행에 null 확인이 빠졌다. 만약 per- sistentStore가 null이라면 실행 시 NullPointerException이 발생한다.  
 애플리케이션 저 아래서 날린 NullPointer Exception는 처리하기 어렵다.  
@@ -120,10 +120,10 @@ null을 반환하는 코드는 일거리를 늘릴 뿐만 아니라 호출자에
 정상적인 인수로 null을 기대하는 API가 아니라면 메서드로 null을 전달하는 코드는 최대한 피한다.  
 누군가 인수로 null을 전달하면 당연히 NullPointerException이 발생한다.  
 1) 이럴 때는 새로운 예외 유형을 만드는 방법이 있다.  
-![image](https://github.com/Growth-Collectors/Clean-Code/assets/93559998/c5b40490-5a64-4cdc-ade6-1bd02304a896)
+![image](https://github.com/Growth-Collectors/Clean-Code/assets/93559998/c5b40490-5a64-4cdc-ade6-1bd02304a896)  
 위 코드는 NullPointerException보다는 조금 낫지만, InvalidArgumentException을 잡아내는 처리기가 필요하다.  
 2) assert 문을 사용하는 방법도 있다.  
-![image](https://github.com/Growth-Collectors/Clean-Code/assets/93559998/fa8c615a-d0e2-4de0-9085-10018b4805e3)
+![image](https://github.com/Growth-Collectors/Clean-Code/assets/93559998/fa8c615a-d0e2-4de0-9085-10018b4805e3)  
 문서화가 잘 되어 코드 읽기는 편하지만 문제를 해결하지는 못한다. 누군가 null 을 전달하면 여전히 실행 오류가 발생한다.  
   
 대다수 프로그래밍 언어는 호출자가 실수로 넘기는 null을 적절히 처리하는 방법이 없다. 그렇다면 애초에 null을 넘기지 못하도록 금지하는 정책이 합리적 이다.  
@@ -131,3 +131,58 @@ null을 반환하는 코드는 일거리를 늘릴 뿐만 아니라 호출자에
   
 깨끗한 코드는 읽기도 좋아야 하지만 안정성도 높아야 한다.  
 오류처리를 프로그램 논리와 분리해 독자적인 사안으로 고려하면 튼튼하고 깨끗한 코드를 작성할 수 있고, 독립적인 추론이 가능해지며, 코드 유지보수성도 크게 높아진다.  
+  
+### 경계  
+[외부 코드 사용하기]  
+제네릭스(Generics)을 사용하면 코드 가독성이 크게 높아진다.  
+```
+Map<String, Sensor> sensors new HashMap<Sensor>(); 
+...
+Sensor s = sensors.get(sensorId);
+```
+자바5가 제네릭스를 지원하면서 Map 인터페이스가 변했고, 실제로 제네릭스 사용을 금지하는 시스템도 있다.  
+  
+다음은 Map을 좀 더 깔끔하게 사용한 코드다.  
+```
+public class Sensors {
+  private Map sensors = new HashMap();
+
+  public Sensor getById(String id) { 
+     return (Sensor) sensors.get(id);
+  }
+  // 이하 생략 
+}
+```
+경계 인터페이스인 Map을 Sensors안으로 숨겨서, Map 인터페이스가 변하더라도 나머지 프로그램에는 영향을 미치지 않는다.  
+Sensors 클래스 안에서 객체 유형을 관리하고 변환하기 때문에 제네릭스를 사용하든 하지 않든 더 이상 문제가 안 된다.  
+  
+Map클래스를 사용할 때마다 위와 같이 캡슐화하라는 소리가 아니다.  
+Map을(혹은 유사한 경계 인터페이스를) 여기저기 넘기지 말라는 말이다.  
+Map과같은 경계 인터페이스를 이용할 때는 이를 이용하는 클래스나 클래스 계열 밖으로 노출되지 않도록 주의한다.  
+  
+[경계 살피고 익히기]  
+외부에서 가져온 패키지를 시용하려고 할 때, 보통 하루나 이틀 (아니면 더 오랫동안) 문서를 읽으며 사용법을 결정한다. 그런 다음 우리쪽 코드를 작성해 라이브러리가 예상대로 동작하는지 확인한다.  
+그러나 외부 코드를 호출하는 대신, 곧바로 우리쪽 간단한 테스트 케이스를 작성해 외부 코드를 익히는 `학습 테스트`가 있다.  
+학습 테스트는 프로그램에서 사용하려는 방식대로 외부 API를 호출한다.  
+  
+[log4j]  
+로깅 기능을 직접 구현하는 대신 아파치의 log4j 패키지를 사용한다.
+  
+[아직 존재하지 않는 코드를 사용하기]  
+경계와 관련한 또 다른 유형은 아는 코드와 모르는 코드를 분리하는 경계가 있다.  
+예시) 다른 팀이 아직 API를 설계하지 않아 우리 팀은 구현을 나중으로 미룬 상태에서 이쪽 코드를 진행하고자 자체적으로 인터페이스를 정의한다.  
+  Transmitter라는 간단한 클래스를 만든 후 transmit라는 메서드를 추가했다.
+  ![image](https://github.com/Growth-Collectors/Clean-Code/assets/93559998/9ef6bc67-5c95-43ce-828f-c8fc7a65b851)  
+  - 우리가 바라는 인터페이스를 구현하면 우리가 인터페이스를 전적으로 통제 한다는 장점이 생긴다. 또한 코드 가독성도 높아지고 코드 의도도 분명해진다.  
+  - `ADAPTER 패턴`으로 API 사용을 캡슐화해 API가 바뀔 때 수정할 코드를 한 곳으로 모았다.
+  이와 같은 설계는 테스트도 아주 편하다. 적절한 FakeTransmitter 클래스를 시용하면 CommunciationsController 클래스를 테스트할 수 있다.  
+  
+[깨끗한 경계]  
+변경이 대표적인 예이다.  
+경계에 위치하는 코드는 깔끔히 분리한다. 또한 기대치를 정의하는 테스트 케이스도 작성한다.  
+통제가 불가능한 외부 패키지에 의존하는 대신 통제가 가능한 우리 코드에 의존하는 편이 훨씬 좋다. 자칫하면 오히려 외부 코드에 휘둘리고 만다.  
+외부 패키지를 호출하는 코드를 가능한 줄여 경계를 관리하자.  
+새로운 클래스로 경계를 감싸거나 아니면 ADAPTER 패턴을 사용해 우리가 원하는 인터페이스를 패키지가 제공하는 인터페이스로 변환하자.  
+어느 방법이든 코드가독성이 높아지며， 경계 인터페이스를 사용하는 일관성도 높아지며， 외부 패키지가 변했을 때 변경할 코드도 줄어든다.  
+
+

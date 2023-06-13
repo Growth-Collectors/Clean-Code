@@ -105,7 +105,7 @@ public class PerDiemMealExpenses implements MealExpenses {
 클래스를 만들거나 객체를 조작해 특수 사례를 처리하는 방식이다. 그러면 클래스나 객체가 예외적인 상황을 캡슐화해서 처리하므로, 클라이언트 코드가 예외적인 상황을 처리할 필요가 없어진다.  
   
 [null을 반환하지 마라]  
-한 줄 건너 하나썩 null을 확인하는 코드
+한 줄 건너 하나씩 null을 확인하는 코드  
 ![image](https://github.com/Growth-Collectors/Clean-Code/assets/93559998/a1d79be7-ec91-4ade-8e6a-4161c05bf037)  
 null을 반환하는 코드는 일거리를 늘릴 뿐만 아니라 호출자에게 문제를 떠넘긴다. 누구 하나라도 null 확인을 빼먹는다면 애플리케이션이 통제 불능에 빠질지도 모른다.  
 위 코드에서 둘째 행에 null 확인이 빠졌다. 만약 per- sistentStore가 null이라면 실행 시 NullPointerException이 발생한다.  

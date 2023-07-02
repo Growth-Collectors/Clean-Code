@@ -5,7 +5,7 @@
 편리한 유틸리티가 없으면 main 함수로 넘어오는 문자열 배열을 직접 분석하게 된다. 새로 짤 유틸리티를 Args라고 부른다. 
 
 ###  Args 사용법
-목록 14-7 ArgsException.java
+
 ```java
 public static void main(String[] args) {
   try {
@@ -26,6 +26,7 @@ Args는 사용법이 간단하다. 매개변수 두개로 Args 클래스 사용�
 
 구체적인 오류를 알아내려면 예외가 제공하는 errorMessage 메소드를 사용한다. 
 
+14-7 ArgsException.java
 ```java
 import static com.objectmentor.utilities.args.ArgsException.ErrorCode.*;
 

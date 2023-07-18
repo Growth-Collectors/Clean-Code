@@ -1,3 +1,92 @@
+# 냄새와 휴리스틱 
+### 28. 조건을 캡슐화
+
+boolean은 이해하기 어렵다. 조건의 의도를 분명히 밝히는 함수로 표현하라.
+
+```java
+// Good
+if (shouldBeDeleted(timer))
+
+// Bad
+if (timer.hasExpired() && !timer.isRecurrent())
+```
+
+### 29. 부정 조건은 피하라
+
+가능하면 긍정조건으로 표현하는 것이 이해하기 쉽다.
+
+### 30. 함수는 한 가지만 해야 한다.
+
+한 함수 안에 여러 단락을 이어 일련의 작업을 수행하는 것은 한 가지 일만 하는 것이 아니다.
+
+한 가지만 수행하는 더 작은 함수 여럿으로 나눠야 한다.
+
+```java
+public void pay() {
+  for (Employee e : employees) {
+    if (e.isPayday()) {
+      Money pay = e.caculatePay();
+      e.deliverPay(pay);
+    }
+  }
+}
+```
+
+위 함수는 세 가지 임무를 수행한다. 직원 목록을 루프로 돌고, 직원의 월급일을 확인하고, 월급을 지급한다.
+
+이를 임무별로 3개의 함수로 나누는 것이 좋다.
+
+```java
+public void pay() {
+  for (Employee e : employees) {
+    payIfNeccessary(e)
+  }
+}
+
+public void payIfNeccessary(Employee e) {
+  if (e.isPayday()) {
+    calculateAndDeliverPay(e);
+  }
+}
+
+public void calculateAndDeliverPay(Employee e) {
+  Money pay = e.calculatePay();
+  e.deliverPay(pay);
+}
+```
+
+### 31. 숨겨진 시간적인 결합
+
+때로는 시간적인 결합이 필요하지만 이를 숨겨서는 안된다.
+
+함수 인수를 적절히 배치해 함수가 호출되는 순서를 명백히 드러내야 한다.
+
+```java
+public class MoogDiver {
+  Gradient gradient;
+  List<Spline> splines;
+
+  public void dive(String reason) {
+    Gradient gradient = saturateGradient();
+    List<Spline> splines = reticulateSplines(gradient);
+    diveForMoog(splines, reason);
+  }
+  ...
+}
+```
+
+위 코드에서는 일종의 연결 소자를 생성해 시간적인 결합을 노출했다.
+
+### 32. 일관성 유지
+
+코드 구조를 잡을 때는 이유를 고민한다. 그리고 그 이유를 코드 구조로 명백히 표현한다.
+
+시스템 전반에 걸쳐 구조가 일관성이 있다면 남들도 일관성을 따르고 보존한다.
+
+### 33. 경계 조건을 캡슐화
+
+경계 조건은 한 곳에서 별도로 처리한다. 그리고 변수로 캡슐화 하는 것이 좋다.
+
 
 # 부록 A. 동시성
 

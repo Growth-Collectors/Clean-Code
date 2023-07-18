@@ -6,6 +6,7 @@
 #### Week4 (2023.06.20) : [11~13 장](https://github.com/Growth-Collectors/Clean-Code/tree/main/week4) 
 #### Week5 (2023.07.02) : [14 장](https://github.com/Growth-Collectors/Clean-Code/tree/main/week5) 
 #### Week6 (2023.07.11) : [15~17 장](https://github.com/Growth-Collectors/Clean-Code/tree/main/week6) 
+#### Week7 (2023.07.18) : [17 장~부록](https://github.com/Growth-Collectors/Clean-Code/tree/main/week7) 
 
 ## 매주 화요일 8PM 스터디
 - 1차 2023.05.30(화) 8PM(offline ☕️)
